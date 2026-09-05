@@ -250,7 +250,7 @@
   <!-- 큰 배너 -->
   <div class="banner">
     <h2>오늘 캔 신선한 산나물, 지금 만나보세요!</h2>
-    <button onclick="showPopup('신선한 산나물을 준비했어요! 곧 만나보세요 😊')">상품 보러가기</button>
+    <button onclick="showStaticPopup('신선한 산나물을 준비했어요! 곧 만나보세요 😊')">상품 보러가기</button>
   </div>
 
   <!-- 카테고리 버튼 -->
@@ -319,27 +319,7 @@
   </div>
 
   <script>
-    let flyTimer;
-
-    function showPopup(message) {
-      const box = document.querySelector('.popup-box');
-      document.getElementById('popup-text').innerText = message;
-      document.getElementById('popup').classList.add('active');
-
-      flyToRandomSpot(box);
-      flyTimer = setInterval(function () {
-        flyToRandomSpot(box);
-      }, 800);
-    }
-
-    function flyToRandomSpot(box) {
-      const maxLeft = window.innerWidth - box.offsetWidth;
-      const maxTop = window.innerHeight - box.offsetHeight;
-      box.style.left = Math.random() * maxLeft + 'px';
-      box.style.top = Math.random() * maxTop + 'px';
-    }
-
-    // 날아다니지 않고 화면 가운데에 가만히 뜨는 팝업
+    // 화면 가운데에 뜨는 팝업
     function showStaticPopup(message) {
       const box = document.querySelector('.popup-box');
       document.getElementById('popup-text').innerText = message;
@@ -351,7 +331,6 @@
 
     function closePopup() {
       document.getElementById('popup').classList.remove('active');
-      clearInterval(flyTimer);
     }
 
     // 카테고리 버튼 클릭 시 해당 상품만 보여주기
