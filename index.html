@@ -244,7 +244,7 @@
     <a href="#">고객센터</a>
     <a href="#">이벤트</a>
     <a href="#">공지사항</a>
-    <a href="#" onclick="showPopup('문의 전화: 010-1234-5678')">문의하기</a>
+    <a href="#" onclick="showStaticPopup('문의 전화: 010-1234-5678')">문의하기</a>
   </nav>
 
   <!-- 큰 배너 -->
@@ -337,6 +337,16 @@
       const maxTop = window.innerHeight - box.offsetHeight;
       box.style.left = Math.random() * maxLeft + 'px';
       box.style.top = Math.random() * maxTop + 'px';
+    }
+
+    // 날아다니지 않고 화면 가운데에 가만히 뜨는 팝업
+    function showStaticPopup(message) {
+      const box = document.querySelector('.popup-box');
+      document.getElementById('popup-text').innerText = message;
+      document.getElementById('popup').classList.add('active');
+
+      box.style.left = (window.innerWidth - box.offsetWidth) / 2 + 'px';
+      box.style.top = (window.innerHeight - box.offsetHeight) / 2 + 'px';
     }
 
     function closePopup() {
