@@ -44,6 +44,12 @@
     font-size: 14px;
   }
 
+  #heart-count {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: bold;
+  }
+
   /* 메뉴 */
   nav {
     display: flex;
@@ -141,6 +147,25 @@
     font-weight: bold;
     padding: 4px 10px;
     border-radius: 6px;
+  }
+
+  .heart-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background-color: white;
+    color: #ccc;
+    font-size: 18px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+  }
+
+  .heart-btn.active {
+    color: #ff4757;
   }
 
   .card .product-photo {
@@ -254,6 +279,7 @@
   <header>
     <h1>인수의 산나물 가게</h1>
     <p>산에서 바로 온 신선하고 맛있는 산나물</p>
+    <p id="heart-count">찜한 상품: 0개</p>
   </header>
 
   <!-- 메뉴 4개 -->
@@ -286,6 +312,7 @@
 
     <div class="card" data-category="뿌리줄기">
       <div class="best-badge">BEST</div>
+      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
       <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Bracken_%28Pteridium_aquilinum%29_frond_unfurling.JPG" alt="고사리">
       <h3>고사리</h3>
       <div class="old-price">8,000원</div>
@@ -294,6 +321,7 @@
 
     <div class="card" data-category="잎나물">
       <div class="best-badge">BEST</div>
+      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
       <img class="product-photo" src="https://images.pexels.com/photos/4506881/pexels-photo-4506881.jpeg?auto=compress&cs=tinysrgb&w=400" alt="취나물">
       <h3>취나물</h3>
       <div class="old-price">7,000원</div>
@@ -302,6 +330,7 @@
 
     <div class="card" data-category="잎나물">
       <div class="best-badge">BEST</div>
+      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
       <img class="product-photo" src="https://images.pexels.com/photos/2270249/pexels-photo-2270249.jpeg?auto=compress&cs=tinysrgb&w=400" alt="곰취">
       <h3>곰취</h3>
       <div class="old-price">9,000원</div>
@@ -309,6 +338,7 @@
     </div>
 
     <div class="card" data-category="새싹">
+      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
       <img class="product-photo" src="https://images.pexels.com/photos/36346265/pexels-photo-36346265.jpeg?auto=compress&cs=tinysrgb&w=400" alt="콩나물">
       <h3>콩나물</h3>
       <div class="old-price">3,000원</div>
@@ -316,6 +346,7 @@
     </div>
 
     <div class="card" data-category="잎나물">
+      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
       <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/9/90/Korean_angelica-tree_shoots.jpg" alt="두릅">
       <h3>두릅</h3>
       <div class="old-price">10,000원</div>
@@ -357,6 +388,14 @@
 
     function closePopup() {
       document.getElementById('popup').classList.remove('active');
+    }
+
+    // 하트를 누르면 찜하기 토글 + 개수 표시
+    let heartCount = 0;
+    function toggleHeart(btn) {
+      btn.classList.toggle('active');
+      heartCount += btn.classList.contains('active') ? 1 : -1;
+      document.getElementById('heart-count').textContent = '찜한 상품: ' + heartCount + '개';
     }
 
     // 카테고리 버튼 클릭 시 해당 상품만 보여주기
