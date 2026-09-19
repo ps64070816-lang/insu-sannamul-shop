@@ -605,7 +605,7 @@
     // 담기 버튼을 누르면 장바구니에 상품 추가 (이미 있으면 개수만 증가)
     function addToCart(name, price) {
       if (!cart[name]) {
-        cart[name] = { price: price, qty: 0 };
+        cart[name] = { price: price, qty: 0, addedAt: new Date().toISOString() };
       }
       cart[name].qty += 1;
       renderCart();

@@ -54,10 +54,21 @@
     padding: 20px 0;
   }
 
+  .cart-select-all {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #555;
+  }
+
   .cart-row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 10px;
     padding: 10px 0;
     border-bottom: 1px solid #eee;
   }
@@ -67,8 +78,15 @@
   }
 
   .cart-item-name {
+    flex: 1;
     font-size: 15px;
     color: #333;
+  }
+
+  .cart-item-date {
+    font-size: 12px;
+    color: #999;
+    white-space: nowrap;
   }
 
   .cart-remove-btn {
@@ -121,7 +139,7 @@
       <p class="cart-empty-text">담긴 상품이 없습니다</p>
     </div>
     <div class="cart-total">
-      <span>합계</span>
+      <span>선택 상품 합계</span>
       <span id="cart-total-price">0원</span>
     </div>
   </div>
@@ -141,8 +159,23 @@
     const CART_STORAGE_KEY = 'sannamulCart';
     const cart = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '{}');
 
+    // 선택 여부는 화면에서만 쓰는 상태 (기본은 전체 선택)
+    const selected = {};
+    Object.keys(cart).forEach(function (name) {
+      selected[name] = true;
+    });
+
     function saveCart() {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '-';
+      const d = new Date(iso);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return y + '-' + m + '-' + day;
     }
 
     function removeFromCart(name) {
@@ -150,8 +183,31 @@
       cart[name].qty -= 1;
       if (cart[name].qty <= 0) {
         delete cart[name];
+        delete selected[name];
       }
       renderCart();
+    }
+
+    function toggleSelect(name, checked) {
+      selected[name] = checked;
+      renderTotal();
+    }
+
+    function toggleSelectAll(checked) {
+      Object.keys(cart).forEach(function (name) {
+        selected[name] = checked;
+      });
+      renderCart();
+    }
+
+    function renderTotal() {
+      let total = 0;
+      Object.keys(cart).forEach(function (name) {
+        if (selected[name]) {
+          total += cart[name].price * cart[name].qty;
+        }
+      });
+      document.getElementById('cart-total-price').textContent = total.toLocaleString() + '원';
     }
 
     function renderCart() {
@@ -166,17 +222,27 @@
         return;
       }
 
-      let total = 0;
-      listEl.innerHTML = names.map(function (name) {
+      const allChecked = names.every(function (name) { return selected[name]; });
+
+      const selectAllHtml = '<div class="cart-select-all">' +
+        '<input type="checkbox" id="select-all" onchange="toggleSelectAll(this.checked)" ' + (allChecked ? 'checked' : '') + '>' +
+        '<label for="select-all">전체 선택</label>' +
+        '</div>';
+
+      const rowsHtml = names.map(function (name) {
         const item = cart[name];
-        total += item.price * item.qty;
+        const checked = selected[name] ? 'checked' : '';
         return '<div class="cart-row">' +
+          '<input type="checkbox" onchange="toggleSelect(\'' + name + '\', this.checked)" ' + checked + '>' +
           '<span class="cart-item-name">' + name + ' - ' + item.price.toLocaleString() + '원 x ' + item.qty + '</span>' +
+          '<span class="cart-item-date">' + formatDate(item.addedAt) + ' 담음</span>' +
           '<button class="cart-remove-btn" onclick="removeFromCart(\'' + name + '\')">빼기</button>' +
           '</div>';
       }).join('');
 
-      document.getElementById('cart-total-price').textContent = total.toLocaleString() + '원';
+      listEl.innerHTML = selectAllHtml + rowsHtml;
+
+      renderTotal();
     }
 
     renderCart();
