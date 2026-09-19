@@ -222,21 +222,6 @@
     background-color: #14486d;
   }
 
-  /* 장바구니 */
-  .cart-section {
-    background-color: white;
-    padding: 30px 20px;
-    margin: 0 20px 20px;
-    border-radius: 10px;
-  }
-
-  .cart-section h2 {
-    color: #1e6091;
-    font-size: 22px;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-
   .cart-empty-text {
     text-align: center;
     color: #999;
@@ -497,14 +482,6 @@
 
   </div>
 
-  <!-- 장바구니 -->
-  <div class="cart-section">
-    <h2>장바구니</h2>
-    <div id="cart-list">
-      <p class="cart-empty-text">담긴 상품이 없습니다</p>
-    </div>
-  </div>
-
   <!-- 쇼핑몰 소개글 -->
   <div class="about">
     <h2>아름답고 창의적인 새로운 상품개발</h2>
@@ -620,7 +597,6 @@
               '</div>';
           }).join('');
 
-      document.getElementById('cart-list').innerHTML = html;
       document.getElementById('cart-modal-list').innerHTML = html;
     }
 
