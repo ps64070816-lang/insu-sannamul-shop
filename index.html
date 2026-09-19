@@ -403,7 +403,10 @@
     <a href="#">이벤트</a>
     <a href="#">공지사항</a>
     <a href="#" onclick="showStaticPopup('문의 전화: 010-1234-5678')">문의하기</a>
-    <a href="signup.html">주주되기</a>
+    <a href="login.html" id="nav-login-link">로그인</a>
+    <a href="signup.html" id="nav-signup-link">주주되기</a>
+    <span id="nav-user-email" style="padding: 15px 10px; display: none;"></span>
+    <a href="#" id="nav-logout-link" onclick="logoutUser()" style="display: none;">로그아웃</a>
     <a href="#" onclick="openCartModal()">🛒 장바구니 (<span id="nav-cart-count">0</span>)</a>
   </nav>
 
@@ -560,6 +563,35 @@
     const SUPABASE_URL = 'https://jrkofuxuhkigwllirkmk.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_AjeTffA5iwUFd-xKLEvDPg_o0yuW6_I';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 로그인 상태에 따라 상단 메뉴 표시를 바꾸기
+    function updateAuthNav(session) {
+      const loggedIn = !!session;
+      document.getElementById('nav-login-link').style.display = loggedIn ? 'none' : '';
+      document.getElementById('nav-signup-link').style.display = loggedIn ? 'none' : '';
+      document.getElementById('nav-logout-link').style.display = loggedIn ? '' : 'none';
+
+      const emailEl = document.getElementById('nav-user-email');
+      if (loggedIn) {
+        emailEl.textContent = session.user.email;
+        emailEl.style.display = '';
+      } else {
+        emailEl.style.display = 'none';
+      }
+    }
+
+    async function logoutUser() {
+      await supabaseClient.auth.signOut();
+      window.location.reload();
+    }
+
+    supabaseClient.auth.getSession().then(function (result) {
+      updateAuthNav(result.data.session);
+    });
+
+    supabaseClient.auth.onAuthStateChange(function (event, session) {
+      updateAuthNav(session);
+    });
   </script>
 
   <script>

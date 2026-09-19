@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>로그인 - 인수의 산나물 가게</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Malgun Gothic', sans-serif;
+  }
+
+  html {
+    height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: #1e6091;
+    background-image: url('https://images.unsplash.com/photo-1542708993627-b6e5bbae43c4?auto=format&fit=crop&w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #333;
+  }
+
+  header {
+    background-color: #1e6091;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+
+  header h1 {
+    font-size: 26px;
+  }
+
+  .login-section {
+    background-color: white;
+    padding: 30px 25px;
+    margin: 30px 20px;
+    border-radius: 10px;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .login-section label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 6px;
+    margin-top: 16px;
+  }
+
+  .login-section label:first-of-type {
+    margin-top: 0;
+  }
+
+  .login-section input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+
+  .login-section input:focus {
+    outline: none;
+    border-color: #1e6091;
+  }
+
+  .login-btn {
+    width: 100%;
+    margin-top: 24px;
+    background-color: #1e6091;
+    color: white;
+    border: none;
+    padding: 12px 0;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .login-btn:hover {
+    background-color: #14486d;
+  }
+
+  .login-btn:disabled {
+    background-color: #9db8c9;
+    cursor: default;
+  }
+
+  .login-message {
+    margin-top: 16px;
+    font-size: 14px;
+    text-align: center;
+    display: none;
+  }
+
+  .login-message.success {
+    display: block;
+    color: #1e7e34;
+  }
+
+  .login-message.error {
+    display: block;
+    color: #d9534f;
+  }
+
+  .signup-hint {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+    font-size: 13px;
+    color: #555;
+  }
+
+  .signup-hint a {
+    color: #1e6091;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .signup-hint a:hover {
+    text-decoration: underline;
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    margin: 5px auto 40px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>로그인</h1>
+  </header>
+
+  <div class="login-section">
+    <form id="login-form">
+      <label for="login-email">이메일</label>
+      <input type="email" id="login-email" placeholder="example@email.com" required>
+
+      <label for="login-password">비밀번호</label>
+      <input type="password" id="login-password" placeholder="비밀번호를 입력해주세요" required>
+
+      <button type="submit" class="login-btn" id="login-btn">로그인</button>
+
+      <p id="login-message" class="login-message"></p>
+
+      <p class="signup-hint">아직 계정이 없으신가요? <a href="signup.html">주주되기</a></p>
+    </form>
+  </div>
+
+  <a class="back-link" href="index.html">← 쇼핑으로 돌아가기</a>
+
+  <!-- Supabase 연결 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://jrkofuxuhkigwllirkmk.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_AjeTffA5iwUFd-xKLEvDPg_o0yuW6_I';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+
+  <script>
+    // Supabase 로그인 에러 메시지를 한국어로 변환
+    function toKoreanError(error) {
+      const msg = (error && error.message) || '';
+
+      if (/invalid login credentials/i.test(msg)) {
+        return '이메일 또는 비밀번호가 올바르지 않습니다.';
+      }
+      if (/email not confirmed/i.test(msg)) {
+        return '이메일 인증이 완료되지 않았습니다. 가입 시 받은 메일함을 확인해주세요.';
+      }
+      if (/invalid email|unable to validate email/i.test(msg)) {
+        return '이메일 형식이 올바르지 않습니다.';
+      }
+      if (/rate limit|too many requests/i.test(msg)) {
+        return '요청이 너무 많습니다. 잠시 후 다시 시도해주세요.';
+      }
+      if (/network|fetch/i.test(msg)) {
+        return '서버에 연결할 수 없습니다. 인터넷 연결을 확인해주세요.';
+      }
+      return msg ? ('로그인에 실패했습니다: ' + msg) : '로그인에 실패했습니다. 잠시 후 다시 시도해주세요.';
+    }
+
+    function showMessage(text, type) {
+      const el = document.getElementById('login-message');
+      el.textContent = text;
+      el.className = 'login-message ' + type;
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const btn = document.getElementById('login-btn');
+
+      if (!email || !password) {
+        showMessage('이메일과 비밀번호를 모두 입력해주세요.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '처리 중...';
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
+
+      btn.disabled = false;
+      btn.textContent = '로그인';
+
+      if (error) {
+        showMessage(toKoreanError(error), 'error');
+        return;
+      }
+
+      showMessage('로그인되었습니다.', 'success');
+      setTimeout(function () {
+        window.location.href = 'index.html';
+      }, 800);
+    });
+  </script>
+
+</body>
+</html>
