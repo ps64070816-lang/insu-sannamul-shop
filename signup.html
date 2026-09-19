@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>주주되기 - 인수의 산나물 가게</title>
+<title>회원가입 - 인수의 산나물 가게</title>
 <style>
   * {
     margin: 0;
@@ -138,7 +138,7 @@
 <body>
 
   <header>
-    <h1>주주되기</h1>
+    <h1>회원가입</h1>
     <p>산에서 바로 온 신선하고 맛있는 산나물, 인수의 산나물 가게입니다.</p>
   </header>
 
@@ -152,7 +152,7 @@
       <input type="password" id="signup-password" placeholder="6자 이상, 영문 대문자 포함" required>
       <p class="field-guide">영문 대문자를 포함해 6자 이상으로 입력해주세요.</p>
 
-      <button type="submit" class="signup-btn" id="signup-btn">주주되기</button>
+      <button type="submit" class="signup-btn" id="signup-btn">회원가입</button>
 
       <p id="signup-message" class="signup-message"></p>
     </form>
@@ -223,7 +223,7 @@
       const { data, error } = await supabaseClient.auth.signUp({ email: email, password: password });
 
       btn.disabled = false;
-      btn.textContent = '주주되기';
+      btn.textContent = '회원가입';
 
       if (error) {
         showMessage(toKoreanError(error), 'error');
