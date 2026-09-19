@@ -132,6 +132,13 @@
     flex-wrap: wrap;
   }
 
+  .products-status {
+    color: white;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+  }
+
   .card {
     position: relative;
     background-color: white;
@@ -437,112 +444,9 @@
     <button class="cat-btn" onclick="filterCategory('새싹', this)">새싹</button>
   </div>
 
-  <!-- 상품 카드 10개 -->
-  <div class="products">
-
-    <div class="card" data-category="뿌리줄기">
-      <div class="best-badge">BEST</div>
-      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
-      <button class="add-cart-btn badge-offset" onclick="addToCart('고사리', 7500)">담기</button>
-      <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Bracken_%28Pteridium_aquilinum%29_frond_unfurling.JPG" alt="고사리">
-      <h3>고사리</h3>
-      <p class="product-desc">쫄깃한 식감이 매력적인 대표 산나물, 나물무침에 잘 어울려요</p>
-      <div class="old-price">9,200원</div>
-      <div class="price">7,500원 <span class="discount"></span></div>
-    </div>
-
-    <div class="card" data-category="잎나물">
-      <div class="best-badge">BEST</div>
-      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
-      <button class="add-cart-btn badge-offset" onclick="addToCart('취나물', 6800)">담기</button>
-      <img class="product-photo" src="https://images.pexels.com/photos/4506881/pexels-photo-4506881.jpeg?auto=compress&cs=tinysrgb&w=400" alt="취나물">
-      <h3>취나물</h3>
-      <p class="product-desc">향긋한 향과 부드러운 식감의 봄나물이에요</p>
-      <div class="old-price">8,100원</div>
-      <div class="price">6,800원 <span class="discount"></span></div>
-    </div>
-
-    <div class="card" data-category="잎나물">
-      <div class="best-badge">BEST</div>
-      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
-      <button class="add-cart-btn badge-offset" onclick="addToCart('곰취', 8600)">담기</button>
-      <img class="product-photo" src="https://images.pexels.com/photos/2270249/pexels-photo-2270249.jpeg?auto=compress&cs=tinysrgb&w=400" alt="곰취">
-      <h3>곰취</h3>
-      <p class="product-desc">향긋해서 쌈채소로 인기 많은 산나물이에요</p>
-      <div class="old-price">10,400원</div>
-      <div class="price">8,600원 <span class="discount"></span></div>
-    </div>
-
-    <div class="card" data-category="새싹">
-      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
-      <button class="add-cart-btn" onclick="addToCart('콩나물', 2500)">담기</button>
-      <img class="product-photo" src="https://images.pexels.com/photos/36346265/pexels-photo-36346265.jpeg?auto=compress&cs=tinysrgb&w=400" alt="콩나물">
-      <h3>콩나물</h3>
-      <p class="product-desc">아삭한 식감으로 국물 요리에 잘 어울려요</p>
-      <div class="old-price">3,500원</div>
-      <div class="price">2,500원 <span class="discount"></span></div>
-    </div>
-
-    <div class="card" data-category="잎나물">
-      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
-      <button class="add-cart-btn" onclick="addToCart('두릅', 9800)">담기</button>
-      <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/9/90/Korean_angelica-tree_shoots.jpg" alt="두릅">
-      <h3>두릅</h3>
-      <p class="product-desc">봄철 대표 별미, 초고추장과 찰떡궁합이에요</p>
-      <div class="old-price">11,500원</div>
-      <div class="price">9,800원 <span class="discount"></span></div>
-    </div>
-
-    <div class="card" data-category="잎나물">
-      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
-      <button class="add-cart-btn" onclick="addToCart('고구마순', 6300)">담기</button>
-      <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/4/45/Sweet_potatoes.JPG" alt="고구마순">
-      <h3>고구마순</h3>
-      <p class="product-desc">쫄깃하고 담백한 맛, 볶음나물로 인기예요</p>
-      <div class="old-price">9,000원</div>
-      <div class="price">6,300원 <span class="discount"></span></div>
-    </div>
-
-    <div class="card" data-category="잎나물">
-      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
-      <button class="add-cart-btn" onclick="addToCart('냉이', 5000)">담기</button>
-      <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Capsella_bursa-pastoris_002.JPG" alt="냉이">
-      <h3>냉이</h3>
-      <p class="product-desc">봄내음 가득한 향긋한 뿌리나물이에요</p>
-      <div class="old-price">6,000원</div>
-      <div class="price">5,000원 <span class="discount"></span></div>
-    </div>
-
-    <div class="card" data-category="뿌리줄기">
-      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
-      <button class="add-cart-btn" onclick="addToCart('달래', 6000)">담기</button>
-      <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/2/28/Allium_monanthum.jpg" alt="달래">
-      <h3>달래</h3>
-      <p class="product-desc">알싸한 향으로 양념장 재료로 인기 많아요</p>
-      <div class="old-price">7,200원</div>
-      <div class="price">6,000원 <span class="discount"></span></div>
-    </div>
-
-    <div class="card" data-category="잎나물">
-      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
-      <button class="add-cart-btn" onclick="addToCart('참나물', 7200)">담기</button>
-      <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/8/87/Chamnamul_flower_%28Pimpinella_brachycarpa%29.jpg" alt="참나물">
-      <h3>참나물</h3>
-      <p class="product-desc">상큼한 향의 쌈채소, 무침에도 잘 어울려요</p>
-      <div class="old-price">8,500원</div>
-      <div class="price">7,200원 <span class="discount"></span></div>
-    </div>
-
-    <div class="card" data-category="잎나물">
-      <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
-      <button class="add-cart-btn" onclick="addToCart('미나리', 4500)">담기</button>
-      <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Oenanthe_javanica1.jpg" alt="미나리">
-      <h3>미나리</h3>
-      <p class="product-desc">향긋하고 아삭한, 물가에서 자란 나물이에요</p>
-      <div class="old-price">5,500원</div>
-      <div class="price">4,500원 <span class="discount"></span></div>
-    </div>
-
+  <!-- 상품 카드: Supabase products 테이블에서 불러와 JS로 채움 -->
+  <div class="products" id="products-container">
+    <p class="products-status">상품을 불러오는 중...</p>
   </div>
 
   <!-- 쇼핑몰 소개글 -->
@@ -731,21 +635,45 @@
       });
     }
 
-    // 할인율 계산해서 가격 옆에 보여주기
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(function (card) {
-      const oldPriceText = card.querySelector('.old-price').textContent;
-      const priceText = card.querySelector('.price').textContent;
+    // Supabase products 테이블에서 상품을 불러와 카드로 그리기
+    async function loadProducts() {
+      const container = document.getElementById('products-container');
 
-      const oldPrice = Number(oldPriceText.replace(/[^0-9]/g, ''));
-      const price = Number(priceText.replace(/[^0-9]/g, ''));
+      const { data, error } = await supabaseClient
+        .from('products')
+        .select('*')
+        .order('id');
 
-      const discountRate = Math.round((1 - price / oldPrice) * 100);
+      if (error) {
+        container.innerHTML = '<p class="products-status">상품을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</p>';
+        return;
+      }
 
-      card.querySelector('.discount').textContent = '(' + discountRate + '% 할인)';
-    });
+      if (!data || data.length === 0) {
+        container.innerHTML = '<p class="products-status">등록된 상품이 없습니다.</p>';
+        return;
+      }
 
-    // 페이지 로드 시 저장된 장바구니 불러오기
+      container.innerHTML = data.map(function (p) {
+        const discountRate = Math.round((1 - p.price / p.old_price) * 100);
+        const bestBadgeHtml = p.is_best ? '<div class="best-badge">BEST</div>' : '';
+        const cartBtnClass = p.is_best ? 'add-cart-btn badge-offset' : 'add-cart-btn';
+
+        return '<div class="card" data-category="' + p.category + '">' +
+          bestBadgeHtml +
+          '<button class="heart-btn" onclick="toggleHeart(this)">♥</button>' +
+          '<button class="' + cartBtnClass + '" onclick="addToCart(\'' + p.name + '\', ' + p.price + ')">담기</button>' +
+          '<img class="product-photo" src="' + p.image_url + '" alt="' + p.name + '">' +
+          '<h3>' + p.name + '</h3>' +
+          '<p class="product-desc">' + (p.description || '') + '</p>' +
+          '<div class="old-price">' + p.old_price.toLocaleString() + '원</div>' +
+          '<div class="price">' + p.price.toLocaleString() + '원 <span class="discount">(' + discountRate + '% 할인)</span></div>' +
+          '</div>';
+      }).join('');
+    }
+
+    // 페이지 로드 시 상품과 저장된 장바구니 불러오기
+    loadProducts();
     loadCart();
     renderCart();
   </script>
