@@ -220,26 +220,20 @@
   }
 
   .add-cart-btn {
-    position: absolute;
-    top: -10px;
-    left: -10px;
+    display: block;
+    width: 100%;
+    margin-top: 12px;
     background-color: #1e6091;
     color: white;
     border: none;
-    padding: 4px 10px;
-    border-radius: 14px;
-    font-size: 11px;
-    font-weight: bold;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    padding: 8px 0;
+    border-radius: 6px;
+    font-size: 14px;
     cursor: pointer;
   }
 
   .add-cart-btn:hover {
     background-color: #14486d;
-  }
-
-  .add-cart-btn.badge-offset {
-    top: 20px;
   }
 
   .cart-empty-text {
@@ -752,17 +746,16 @@
       container.innerHTML = data.map(function (p) {
         const discountRate = Math.round((1 - p.price / p.old_price) * 100);
         const bestBadgeHtml = p.is_best ? '<div class="best-badge">BEST</div>' : '';
-        const cartBtnClass = p.is_best ? 'add-cart-btn badge-offset' : 'add-cart-btn';
 
         return '<div class="card" data-category="' + p.category + '">' +
           bestBadgeHtml +
           '<button class="heart-btn" onclick="toggleHeart(this)">♥</button>' +
-          '<button class="' + cartBtnClass + '" onclick="addToCart(\'' + p.name + '\', ' + p.price + ')">담기</button>' +
           '<img class="product-photo" src="' + p.image_url + '" alt="' + p.name + '">' +
           '<h3>' + p.name + '</h3>' +
           '<p class="product-desc">' + (p.description || '') + '</p>' +
           '<div class="old-price">' + p.old_price.toLocaleString() + '원</div>' +
           '<div class="price">' + p.price.toLocaleString() + '원 <span class="discount">(' + discountRate + '% 할인)</span></div>' +
+          '<button class="add-cart-btn" onclick="addToCart(\'' + p.name + '\', ' + p.price + ')">담기</button>' +
           '</div>';
       }).join('');
     }
