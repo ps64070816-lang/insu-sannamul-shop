@@ -237,7 +237,7 @@
     text-align: center;
   }
 
-  #cart-empty {
+  .cart-empty-text {
     text-align: center;
     color: #999;
     font-size: 14px;
@@ -272,6 +272,57 @@
 
   .cart-remove-btn:hover {
     background-color: #c5313d;
+  }
+
+  /* 장바구니 모달 (상단 메뉴에서 열림) */
+  .cart-modal-box {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 340px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    text-align: left;
+  }
+
+  .cart-modal-box h3 {
+    color: #1e6091;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .cart-modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .cart-modal-actions button {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .cart-modal-close {
+    background-color: #e5e5e5;
+    color: #333;
+  }
+
+  .cart-modal-close:hover {
+    background-color: #d5d5d5;
+  }
+
+  .cart-modal-go {
+    background-color: #1e6091;
+    color: white;
+  }
+
+  .cart-modal-go:hover {
+    background-color: #14486d;
   }
 
   /* 쇼핑몰 소개글 */
@@ -367,6 +418,7 @@
     <a href="#">이벤트</a>
     <a href="#">공지사항</a>
     <a href="#" onclick="showStaticPopup('문의 전화: 010-1234-5678')">문의하기</a>
+    <a href="#" onclick="openCartModal()">🛒 장바구니 (<span id="nav-cart-count">0</span>)</a>
   </nav>
 
   <!-- 큰 배너 -->
@@ -449,7 +501,7 @@
   <div class="cart-section">
     <h2>장바구니</h2>
     <div id="cart-list">
-      <p id="cart-empty">담긴 상품이 없습니다</p>
+      <p class="cart-empty-text">담긴 상품이 없습니다</p>
     </div>
   </div>
 
@@ -470,6 +522,20 @@
     <div class="popup-box">
       <p id="popup-text"></p>
       <button onclick="closePopup()">닫기</button>
+    </div>
+  </div>
+
+  <!-- 장바구니 모달 -->
+  <div class="popup-overlay" id="cart-modal">
+    <div class="cart-modal-box">
+      <h3>장바구니</h3>
+      <div id="cart-modal-list">
+        <p class="cart-empty-text">담긴 상품이 없습니다</p>
+      </div>
+      <div class="cart-modal-actions">
+        <button class="cart-modal-close" onclick="closeCartModal()">닫기</button>
+        <button class="cart-modal-go" onclick="goToCartPage()">장바구니 페이지로 이동</button>
+      </div>
     </div>
   </div>
 
@@ -496,9 +562,24 @@
       document.getElementById('heart-count').textContent = '찜한 상품: ' + heartCount + '개';
     }
 
-    // 담기 버튼을 누르면 장바구니에 상품 추가 (이미 있으면 개수만 증가)
+    // 장바구니는 localStorage에 저장해서 cart.html 페이지와 공유
+    const CART_STORAGE_KEY = 'sannamulCart';
     const cart = {};
 
+    function loadCart() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '{}');
+        Object.assign(cart, saved);
+      } catch (e) {
+        // 저장된 값이 없거나 손상된 경우 빈 장바구니로 시작
+      }
+    }
+
+    function saveCart() {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    }
+
+    // 담기 버튼을 누르면 장바구니에 상품 추가 (이미 있으면 개수만 증가)
     function addToCart(name, price) {
       if (!cart[name]) {
         cart[name] = { price: price, qty: 0 };
@@ -517,29 +598,44 @@
       renderCart();
     }
 
-    // 장바구니 목록과 상단 개수 표시를 다시 그리기
+    // 장바구니 목록(본문 + 모달)과 상단 개수 표시를 다시 그리고 저장
     function renderCart() {
-      const listEl = document.getElementById('cart-list');
-      const names = Object.keys(cart);
+      saveCart();
 
+      const names = Object.keys(cart);
       let totalCount = 0;
       names.forEach(function (name) {
         totalCount += cart[name].qty;
       });
       document.getElementById('cart-count').textContent = '장바구니: ' + totalCount + '개';
+      document.getElementById('nav-cart-count').textContent = totalCount;
 
-      if (names.length === 0) {
-        listEl.innerHTML = '<p id="cart-empty">담긴 상품이 없습니다</p>';
-        return;
-      }
+      const html = names.length === 0
+        ? '<p class="cart-empty-text">담긴 상품이 없습니다</p>'
+        : names.map(function (name) {
+            const item = cart[name];
+            return '<div class="cart-row">' +
+              '<span class="cart-item-name">' + name + ' - ' + item.price.toLocaleString() + '원 x ' + item.qty + '</span>' +
+              '<button class="cart-remove-btn" onclick="removeFromCart(\'' + name + '\')">빼기</button>' +
+              '</div>';
+          }).join('');
 
-      listEl.innerHTML = names.map(function (name) {
-        const item = cart[name];
-        return '<div class="cart-row">' +
-          '<span class="cart-item-name">' + name + ' - ' + item.price.toLocaleString() + '원 x ' + item.qty + '</span>' +
-          '<button class="cart-remove-btn" onclick="removeFromCart(\'' + name + '\')">빼기</button>' +
-          '</div>';
-      }).join('');
+      document.getElementById('cart-list').innerHTML = html;
+      document.getElementById('cart-modal-list').innerHTML = html;
+    }
+
+    // 상단 메뉴의 장바구니 클릭 -> 모달 열기/닫기
+    function openCartModal() {
+      document.getElementById('cart-modal').classList.add('active');
+    }
+
+    function closeCartModal() {
+      document.getElementById('cart-modal').classList.remove('active');
+    }
+
+    // 모달 안 '장바구니 페이지로 이동' 버튼 -> 별도 페이지로 이동
+    function goToCartPage() {
+      window.location.href = 'cart.html';
     }
 
     // 카테고리 버튼 클릭 시 해당 상품만 보여주기
@@ -571,6 +667,10 @@
 
       card.querySelector('.discount').textContent = '(' + discountRate + '% 할인)';
     });
+
+    // 페이지 로드 시 저장된 장바구니 불러오기
+    loadCart();
+    renderCart();
   </script>
 
 </body>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>장바구니 - 인수의 산나물 가게</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Malgun Gothic', sans-serif;
+  }
+
+  html {
+    height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: #1e6091;
+    background-image: url('https://images.unsplash.com/photo-1542708993627-b6e5bbae43c4?auto=format&fit=crop&w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #333;
+  }
+
+  header {
+    background-color: #1e6091;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+
+  header h1 {
+    font-size: 26px;
+  }
+
+  .cart-page-section {
+    background-color: white;
+    padding: 30px 20px;
+    margin: 30px 20px;
+    border-radius: 10px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cart-empty-text {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    padding: 20px 0;
+  }
+
+  .cart-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .cart-row:last-child {
+    border-bottom: none;
+  }
+
+  .cart-item-name {
+    font-size: 15px;
+    color: #333;
+  }
+
+  .cart-remove-btn {
+    background-color: #e63946;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .cart-remove-btn:hover {
+    background-color: #c5313d;
+  }
+
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid #1e6091;
+    font-size: 17px;
+    font-weight: bold;
+    color: #1e6091;
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    margin: 25px auto 40px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>장바구니</h1>
+  </header>
+
+  <div class="cart-page-section">
+    <div id="cart-page-list">
+      <p class="cart-empty-text">담긴 상품이 없습니다</p>
+    </div>
+    <div class="cart-total">
+      <span>합계</span>
+      <span id="cart-total-price">0원</span>
+    </div>
+  </div>
+
+  <a class="back-link" href="index.html">← 쇼핑 계속하기</a>
+
+  <script>
+    const CART_STORAGE_KEY = 'sannamulCart';
+    const cart = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '{}');
+
+    function saveCart() {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    }
+
+    function removeFromCart(name) {
+      if (!cart[name]) return;
+      cart[name].qty -= 1;
+      if (cart[name].qty <= 0) {
+        delete cart[name];
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      saveCart();
+
+      const names = Object.keys(cart);
+      const listEl = document.getElementById('cart-page-list');
+
+      if (names.length === 0) {
+        listEl.innerHTML = '<p class="cart-empty-text">담긴 상품이 없습니다</p>';
+        document.getElementById('cart-total-price').textContent = '0원';
+        return;
+      }
+
+      let total = 0;
+      listEl.innerHTML = names.map(function (name) {
+        const item = cart[name];
+        total += item.price * item.qty;
+        return '<div class="cart-row">' +
+          '<span class="cart-item-name">' + name + ' - ' + item.price.toLocaleString() + '원 x ' + item.qty + '</span>' +
+          '<button class="cart-remove-btn" onclick="removeFromCart(\'' + name + '\')">빼기</button>' +
+          '</div>';
+      }).join('');
+
+      document.getElementById('cart-total-price').textContent = total.toLocaleString() + '원';
+    }
+
+    renderCart();
+  </script>
+
+</body>
+</html>
