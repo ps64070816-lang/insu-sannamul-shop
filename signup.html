@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>회원가입 - 인수의 산나물 가게</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Malgun Gothic', sans-serif;
+  }
+
+  html {
+    height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: #1e6091;
+    background-image: url('https://images.unsplash.com/photo-1542708993627-b6e5bbae43c4?auto=format&fit=crop&w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #333;
+  }
+
+  header {
+    background-color: #1e6091;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+
+  header h1 {
+    font-size: 26px;
+  }
+
+  .signup-section {
+    background-color: white;
+    padding: 30px 25px;
+    margin: 30px 20px;
+    border-radius: 10px;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .signup-section label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 6px;
+    margin-top: 16px;
+  }
+
+  .signup-section label:first-of-type {
+    margin-top: 0;
+  }
+
+  .signup-section input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+
+  .signup-section input:focus {
+    outline: none;
+    border-color: #1e6091;
+  }
+
+  .signup-btn {
+    width: 100%;
+    margin-top: 24px;
+    background-color: #1e6091;
+    color: white;
+    border: none;
+    padding: 12px 0;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .signup-btn:hover {
+    background-color: #14486d;
+  }
+
+  .signup-btn:disabled {
+    background-color: #9db8c9;
+    cursor: default;
+  }
+
+  .signup-message {
+    margin-top: 16px;
+    font-size: 14px;
+    text-align: center;
+    display: none;
+  }
+
+  .signup-message.success {
+    display: block;
+    color: #1e7e34;
+  }
+
+  .signup-message.error {
+    display: block;
+    color: #d9534f;
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    margin: 5px auto 40px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>회원가입</h1>
+  </header>
+
+  <div class="signup-section">
+    <form id="signup-form">
+      <label for="signup-email">이메일</label>
+      <input type="email" id="signup-email" placeholder="example@email.com" required>
+
+      <label for="signup-password">비밀번호</label>
+      <input type="password" id="signup-password" placeholder="6자 이상 입력해주세요" required>
+
+      <button type="submit" class="signup-btn" id="signup-btn">가입하기</button>
+
+      <p id="signup-message" class="signup-message"></p>
+    </form>
+  </div>
+
+  <a class="back-link" href="index.html">← 쇼핑으로 돌아가기</a>
+
+  <!-- Supabase 연결 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://jrkofuxuhkigwllirkmk.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_AjeTffA5iwUFd-xKLEvDPg_o0yuW6_I';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+
+  <script>
+    // Supabase 에러 메시지를 한국어로 변환
+    function toKoreanError(error) {
+      const msg = (error && error.message) || '';
+
+      if (/already registered|already exists|already been registered/i.test(msg)) {
+        return '이미 가입된 이메일입니다.';
+      }
+      if (/password.*at least|password.*characters|weak password/i.test(msg)) {
+        return '비밀번호는 최소 6자 이상이어야 합니다.';
+      }
+      if (/invalid email|unable to validate email/i.test(msg)) {
+        return '이메일 형식이 올바르지 않습니다.';
+      }
+      if (/valid password|password.*required/i.test(msg)) {
+        return '비밀번호를 입력해주세요.';
+      }
+      if (/rate limit|too many requests/i.test(msg)) {
+        return '요청이 너무 많습니다. 잠시 후 다시 시도해주세요.';
+      }
+      if (/network|fetch/i.test(msg)) {
+        return '서버에 연결할 수 없습니다. 인터넷 연결을 확인해주세요.';
+      }
+      return msg ? ('가입에 실패했습니다: ' + msg) : '가입에 실패했습니다. 잠시 후 다시 시도해주세요.';
+    }
+
+    function showMessage(text, type) {
+      const el = document.getElementById('signup-message');
+      el.textContent = text;
+      el.className = 'signup-message ' + type;
+    }
+
+    document.getElementById('signup-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const btn = document.getElementById('signup-btn');
+
+      if (!email || !password) {
+        showMessage('이메일과 비밀번호를 모두 입력해주세요.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '가입 중...';
+
+      const { data, error } = await supabaseClient.auth.signUp({ email: email, password: password });
+
+      btn.disabled = false;
+      btn.textContent = '가입하기';
+
+      if (error) {
+        showMessage(toKoreanError(error), 'error');
+        return;
+      }
+
+      // Supabase는 이미 가입된 이메일이라도 에러 없이 성공 응답을 줄 수 있음
+      // (사용자 존재 여부 노출 방지) - identities가 비어있으면 이미 가입된 계정
+      if (data && data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        showMessage('이미 가입된 이메일입니다.', 'error');
+        return;
+      }
+
+      showMessage('가입이 완료되었습니다.', 'success');
+      document.getElementById('signup-form').reset();
+    });
+  </script>
+
+</body>
+</html>
