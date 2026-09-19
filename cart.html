@@ -165,8 +165,27 @@
       selected[name] = true;
     });
 
+    let currentUserId = null;
+    let cartCache = {}; // renderCart()가 최근에 불러온 상품 목록 (체크박스/합계 계산용 캐시)
+
     function saveCart() {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    }
+
+    async function fetchSupabaseCart() {
+      const { data, error } = await supabaseClient
+        .from('cart_items')
+        .select('*')
+        .eq('user_id', currentUserId)
+        .order('added_at');
+
+      const result = {};
+      if (!error && data) {
+        data.forEach(function (row) {
+          result[row.product_name] = { price: row.price, qty: row.qty, addedAt: row.added_at };
+        });
+      }
+      return result;
     }
 
     function formatDate(iso) {
@@ -178,14 +197,30 @@
       return y + '-' + m + '-' + day;
     }
 
-    function removeFromCart(name) {
-      if (!cart[name]) return;
-      cart[name].qty -= 1;
-      if (cart[name].qty <= 0) {
-        delete cart[name];
-        delete selected[name];
+    async function removeFromCart(name) {
+      if (currentUserId) {
+        const { data } = await supabaseClient
+          .from('cart_items')
+          .select('id, qty')
+          .eq('user_id', currentUserId)
+          .eq('product_name', name)
+          .maybeSingle();
+        if (!data) return;
+
+        if (data.qty - 1 <= 0) {
+          await supabaseClient.from('cart_items').delete().eq('id', data.id);
+        } else {
+          await supabaseClient.from('cart_items').update({ qty: data.qty - 1 }).eq('id', data.id);
+        }
+      } else {
+        if (!cart[name]) return;
+        cart[name].qty -= 1;
+        if (cart[name].qty <= 0) {
+          delete cart[name];
+        }
       }
-      renderCart();
+      delete selected[name];
+      await renderCart();
     }
 
     function toggleSelect(name, checked) {
@@ -194,26 +229,25 @@
     }
 
     function toggleSelectAll(checked) {
-      Object.keys(cart).forEach(function (name) {
+      Object.keys(cartCache).forEach(function (name) {
         selected[name] = checked;
       });
-      renderCart();
+      renderCartFromCache();
     }
 
     function renderTotal() {
       let total = 0;
-      Object.keys(cart).forEach(function (name) {
+      Object.keys(cartCache).forEach(function (name) {
         if (selected[name]) {
-          total += cart[name].price * cart[name].qty;
+          total += cartCache[name].price * cartCache[name].qty;
         }
       });
       document.getElementById('cart-total-price').textContent = total.toLocaleString() + '원';
     }
 
-    function renderCart() {
-      saveCart();
-
-      const names = Object.keys(cart);
+    // cartCache를 이용해 화면만 다시 그리기 (다시 불러오지 않음, 체크박스 조작용)
+    function renderCartFromCache() {
+      const names = Object.keys(cartCache);
       const listEl = document.getElementById('cart-page-list');
 
       if (names.length === 0) {
@@ -230,7 +264,7 @@
         '</div>';
 
       const rowsHtml = names.map(function (name) {
-        const item = cart[name];
+        const item = cartCache[name];
         const checked = selected[name] ? 'checked' : '';
         return '<div class="cart-row">' +
           '<input type="checkbox" onchange="toggleSelect(\'' + name + '\', this.checked)" ' + checked + '>' +
@@ -245,7 +279,34 @@
       renderTotal();
     }
 
-    renderCart();
+    // 로그인 상태면 Supabase에서, 아니면 localStorage에서 새로 불러온 뒤 화면 그리기
+    async function renderCart() {
+      if (currentUserId) {
+        cartCache = await fetchSupabaseCart();
+      } else {
+        saveCart();
+        cartCache = cart;
+      }
+
+      Object.keys(cartCache).forEach(function (name) {
+        if (!(name in selected)) selected[name] = true;
+      });
+      Object.keys(selected).forEach(function (name) {
+        if (!(name in cartCache)) delete selected[name];
+      });
+
+      renderCartFromCache();
+    }
+
+    supabaseClient.auth.getSession().then(function (result) {
+      currentUserId = result.data.session ? result.data.session.user.id : null;
+      renderCart();
+    });
+
+    supabaseClient.auth.onAuthStateChange(function (event, session) {
+      currentUserId = session ? session.user.id : null;
+      renderCart();
+    });
   </script>
 
 </body>
