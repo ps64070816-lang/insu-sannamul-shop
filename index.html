@@ -552,6 +552,15 @@
     </div>
   </div>
 
+  <!-- Supabase 연결 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Supabase 클라이언트 (아직 특정 기능에 연결하지 않고, 준비만 해둔 상태)
+    const SUPABASE_URL = 'https://jrkofuxuhkigwllirkmk.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_AjeTffA5iwUFd-xKLEvDPg_o0yuW6_I';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+
   <script>
     // 화면 가운데에 뜨는 팝업
     function showStaticPopup(message) {
