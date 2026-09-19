@@ -222,6 +222,58 @@
     background-color: #14486d;
   }
 
+  /* 장바구니 */
+  .cart-section {
+    background-color: white;
+    padding: 30px 20px;
+    margin: 0 20px 20px;
+    border-radius: 10px;
+  }
+
+  .cart-section h2 {
+    color: #1e6091;
+    font-size: 22px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  #cart-empty {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+  }
+
+  .cart-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .cart-row:last-child {
+    border-bottom: none;
+  }
+
+  .cart-item-name {
+    font-size: 15px;
+    color: #333;
+  }
+
+  .cart-remove-btn {
+    background-color: #e63946;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .cart-remove-btn:hover {
+    background-color: #c5313d;
+  }
+
   /* 쇼핑몰 소개글 */
   .about {
     background-color: white;
@@ -341,7 +393,7 @@
       <h3>고사리</h3>
       <div class="old-price">9,200원</div>
       <div class="price">7,500원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart()">담기</button>
+      <button class="add-cart-btn" onclick="addToCart('고사리', 7500)">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
@@ -351,7 +403,7 @@
       <h3>취나물</h3>
       <div class="old-price">8,100원</div>
       <div class="price">6,800원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart()">담기</button>
+      <button class="add-cart-btn" onclick="addToCart('취나물', 6800)">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
@@ -361,7 +413,7 @@
       <h3>곰취</h3>
       <div class="old-price">10,400원</div>
       <div class="price">8,600원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart()">담기</button>
+      <button class="add-cart-btn" onclick="addToCart('곰취', 8600)">담기</button>
     </div>
 
     <div class="card" data-category="새싹">
@@ -370,7 +422,7 @@
       <h3>콩나물</h3>
       <div class="old-price">3,500원</div>
       <div class="price">2,500원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart()">담기</button>
+      <button class="add-cart-btn" onclick="addToCart('콩나물', 2500)">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
@@ -379,7 +431,7 @@
       <h3>두릅</h3>
       <div class="old-price">11,500원</div>
       <div class="price">9,800원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart()">담기</button>
+      <button class="add-cart-btn" onclick="addToCart('두릅', 9800)">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
@@ -388,9 +440,17 @@
       <h3>고구마순</h3>
       <div class="old-price">9,000원</div>
       <div class="price">6,300원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart()">담기</button>
+      <button class="add-cart-btn" onclick="addToCart('고구마순', 6300)">담기</button>
     </div>
 
+  </div>
+
+  <!-- 장바구니 -->
+  <div class="cart-section">
+    <h2>장바구니</h2>
+    <div id="cart-list">
+      <p id="cart-empty">담긴 상품이 없습니다</p>
+    </div>
   </div>
 
   <!-- 쇼핑몰 소개글 -->
@@ -436,11 +496,50 @@
       document.getElementById('heart-count').textContent = '찜한 상품: ' + heartCount + '개';
     }
 
-    // 담기 버튼을 누르면 장바구니 개수 증가
-    let cartCount = 0;
-    function addToCart() {
-      cartCount += 1;
-      document.getElementById('cart-count').textContent = '장바구니: ' + cartCount + '개';
+    // 담기 버튼을 누르면 장바구니에 상품 추가 (이미 있으면 개수만 증가)
+    const cart = {};
+
+    function addToCart(name, price) {
+      if (!cart[name]) {
+        cart[name] = { price: price, qty: 0 };
+      }
+      cart[name].qty += 1;
+      renderCart();
+    }
+
+    // 빼기 버튼을 누르면 개수 감소, 0이 되면 목록에서 제거
+    function removeFromCart(name) {
+      if (!cart[name]) return;
+      cart[name].qty -= 1;
+      if (cart[name].qty <= 0) {
+        delete cart[name];
+      }
+      renderCart();
+    }
+
+    // 장바구니 목록과 상단 개수 표시를 다시 그리기
+    function renderCart() {
+      const listEl = document.getElementById('cart-list');
+      const names = Object.keys(cart);
+
+      let totalCount = 0;
+      names.forEach(function (name) {
+        totalCount += cart[name].qty;
+      });
+      document.getElementById('cart-count').textContent = '장바구니: ' + totalCount + '개';
+
+      if (names.length === 0) {
+        listEl.innerHTML = '<p id="cart-empty">담긴 상품이 없습니다</p>';
+        return;
+      }
+
+      listEl.innerHTML = names.map(function (name) {
+        const item = cart[name];
+        return '<div class="cart-row">' +
+          '<span class="cart-item-name">' + name + ' - ' + item.price.toLocaleString() + '원 x ' + item.qty + '</span>' +
+          '<button class="cart-remove-btn" onclick="removeFromCart(\'' + name + '\')">빼기</button>' +
+          '</div>';
+      }).join('');
     }
 
     // 카테고리 버튼 클릭 시 해당 상품만 보여주기
