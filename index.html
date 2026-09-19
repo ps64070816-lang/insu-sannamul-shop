@@ -213,20 +213,26 @@
   }
 
   .add-cart-btn {
-    display: block;
-    width: 100%;
-    margin-top: 12px;
+    position: absolute;
+    top: -10px;
+    left: -10px;
     background-color: #1e6091;
     color: white;
     border: none;
-    padding: 8px 0;
-    border-radius: 6px;
-    font-size: 14px;
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     cursor: pointer;
   }
 
   .add-cart-btn:hover {
     background-color: #14486d;
+  }
+
+  .add-cart-btn.badge-offset {
+    top: 20px;
   }
 
   .cart-empty-text {
@@ -437,104 +443,104 @@
     <div class="card" data-category="뿌리줄기">
       <div class="best-badge">BEST</div>
       <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
+      <button class="add-cart-btn badge-offset" onclick="addToCart('고사리', 7500)">담기</button>
       <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Bracken_%28Pteridium_aquilinum%29_frond_unfurling.JPG" alt="고사리">
       <h3>고사리</h3>
       <p class="product-desc">쫄깃한 식감이 매력적인 대표 산나물, 나물무침에 잘 어울려요</p>
       <div class="old-price">9,200원</div>
       <div class="price">7,500원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart('고사리', 7500)">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
       <div class="best-badge">BEST</div>
       <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
+      <button class="add-cart-btn badge-offset" onclick="addToCart('취나물', 6800)">담기</button>
       <img class="product-photo" src="https://images.pexels.com/photos/4506881/pexels-photo-4506881.jpeg?auto=compress&cs=tinysrgb&w=400" alt="취나물">
       <h3>취나물</h3>
       <p class="product-desc">향긋한 향과 부드러운 식감의 봄나물이에요</p>
       <div class="old-price">8,100원</div>
       <div class="price">6,800원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart('취나물', 6800)">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
       <div class="best-badge">BEST</div>
       <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
+      <button class="add-cart-btn badge-offset" onclick="addToCart('곰취', 8600)">담기</button>
       <img class="product-photo" src="https://images.pexels.com/photos/2270249/pexels-photo-2270249.jpeg?auto=compress&cs=tinysrgb&w=400" alt="곰취">
       <h3>곰취</h3>
       <p class="product-desc">향긋해서 쌈채소로 인기 많은 산나물이에요</p>
       <div class="old-price">10,400원</div>
       <div class="price">8,600원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart('곰취', 8600)">담기</button>
     </div>
 
     <div class="card" data-category="새싹">
       <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
+      <button class="add-cart-btn" onclick="addToCart('콩나물', 2500)">담기</button>
       <img class="product-photo" src="https://images.pexels.com/photos/36346265/pexels-photo-36346265.jpeg?auto=compress&cs=tinysrgb&w=400" alt="콩나물">
       <h3>콩나물</h3>
       <p class="product-desc">아삭한 식감으로 국물 요리에 잘 어울려요</p>
       <div class="old-price">3,500원</div>
       <div class="price">2,500원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart('콩나물', 2500)">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
       <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
+      <button class="add-cart-btn" onclick="addToCart('두릅', 9800)">담기</button>
       <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/9/90/Korean_angelica-tree_shoots.jpg" alt="두릅">
       <h3>두릅</h3>
       <p class="product-desc">봄철 대표 별미, 초고추장과 찰떡궁합이에요</p>
       <div class="old-price">11,500원</div>
       <div class="price">9,800원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart('두릅', 9800)">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
       <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
+      <button class="add-cart-btn" onclick="addToCart('고구마순', 6300)">담기</button>
       <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/4/45/Sweet_potatoes.JPG" alt="고구마순">
       <h3>고구마순</h3>
       <p class="product-desc">쫄깃하고 담백한 맛, 볶음나물로 인기예요</p>
       <div class="old-price">9,000원</div>
       <div class="price">6,300원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart('고구마순', 6300)">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
       <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
+      <button class="add-cart-btn" onclick="addToCart('냉이', 5000)">담기</button>
       <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Capsella_bursa-pastoris_002.JPG" alt="냉이">
       <h3>냉이</h3>
       <p class="product-desc">봄내음 가득한 향긋한 뿌리나물이에요</p>
       <div class="old-price">6,000원</div>
       <div class="price">5,000원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart('냉이', 5000)">담기</button>
     </div>
 
     <div class="card" data-category="뿌리줄기">
       <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
+      <button class="add-cart-btn" onclick="addToCart('달래', 6000)">담기</button>
       <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/2/28/Allium_monanthum.jpg" alt="달래">
       <h3>달래</h3>
       <p class="product-desc">알싸한 향으로 양념장 재료로 인기 많아요</p>
       <div class="old-price">7,200원</div>
       <div class="price">6,000원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart('달래', 6000)">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
       <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
+      <button class="add-cart-btn" onclick="addToCart('참나물', 7200)">담기</button>
       <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/8/87/Chamnamul_flower_%28Pimpinella_brachycarpa%29.jpg" alt="참나물">
       <h3>참나물</h3>
       <p class="product-desc">상큼한 향의 쌈채소, 무침에도 잘 어울려요</p>
       <div class="old-price">8,500원</div>
       <div class="price">7,200원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart('참나물', 7200)">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
       <button class="heart-btn" onclick="toggleHeart(this)">♥</button>
+      <button class="add-cart-btn" onclick="addToCart('미나리', 4500)">담기</button>
       <img class="product-photo" src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Oenanthe_javanica1.jpg" alt="미나리">
       <h3>미나리</h3>
       <p class="product-desc">향긋하고 아삭한, 물가에서 자란 나물이에요</p>
       <div class="old-price">5,500원</div>
       <div class="price">4,500원 <span class="discount"></span></div>
-      <button class="add-cart-btn" onclick="addToCart('미나리', 4500)">담기</button>
     </div>
 
   </div>
