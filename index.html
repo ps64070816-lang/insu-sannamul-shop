@@ -50,6 +50,12 @@
     font-weight: bold;
   }
 
+  #cart-count {
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: bold;
+  }
+
   /* 메뉴 */
   nav {
     display: flex;
@@ -199,6 +205,23 @@
     font-size: 15px;
   }
 
+  .add-cart-btn {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    background-color: #1e6091;
+    color: white;
+    border: none;
+    padding: 8px 0;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .add-cart-btn:hover {
+    background-color: #14486d;
+  }
+
   /* 쇼핑몰 소개글 */
   .about {
     background-color: white;
@@ -280,6 +303,7 @@
     <h1>인수의 산나물 가게</h1>
     <p>산에서 바로 온 신선하고 맛있는 산나물</p>
     <p id="heart-count">찜한 상품: 0개</p>
+    <p id="cart-count">장바구니: 0개</p>
   </header>
 
   <!-- 메뉴 4개 -->
@@ -317,6 +341,7 @@
       <h3>고사리</h3>
       <div class="old-price">9,200원</div>
       <div class="price">7,500원 <span class="discount"></span></div>
+      <button class="add-cart-btn" onclick="addToCart()">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
@@ -326,6 +351,7 @@
       <h3>취나물</h3>
       <div class="old-price">8,100원</div>
       <div class="price">6,800원 <span class="discount"></span></div>
+      <button class="add-cart-btn" onclick="addToCart()">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
@@ -335,6 +361,7 @@
       <h3>곰취</h3>
       <div class="old-price">10,400원</div>
       <div class="price">8,600원 <span class="discount"></span></div>
+      <button class="add-cart-btn" onclick="addToCart()">담기</button>
     </div>
 
     <div class="card" data-category="새싹">
@@ -343,6 +370,7 @@
       <h3>콩나물</h3>
       <div class="old-price">3,500원</div>
       <div class="price">2,500원 <span class="discount"></span></div>
+      <button class="add-cart-btn" onclick="addToCart()">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
@@ -351,6 +379,7 @@
       <h3>두릅</h3>
       <div class="old-price">11,500원</div>
       <div class="price">9,800원 <span class="discount"></span></div>
+      <button class="add-cart-btn" onclick="addToCart()">담기</button>
     </div>
 
     <div class="card" data-category="잎나물">
@@ -359,6 +388,7 @@
       <h3>고구마순</h3>
       <div class="old-price">9,000원</div>
       <div class="price">6,300원 <span class="discount"></span></div>
+      <button class="add-cart-btn" onclick="addToCart()">담기</button>
     </div>
 
   </div>
@@ -404,6 +434,13 @@
       btn.classList.toggle('active');
       heartCount += btn.classList.contains('active') ? 1 : -1;
       document.getElementById('heart-count').textContent = '찜한 상품: ' + heartCount + '개';
+    }
+
+    // 담기 버튼을 누르면 장바구니 개수 증가
+    let cartCount = 0;
+    function addToCart() {
+      cartCount += 1;
+      document.getElementById('cart-count').textContent = '장바구니: ' + cartCount + '개';
     }
 
     // 카테고리 버튼 클릭 시 해당 상품만 보여주기
