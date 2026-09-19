@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>회원가입 - 인수의 산나물 가게</title>
+<title>주주되기 - 인수의 산나물 가게</title>
 <style>
   * {
     margin: 0;
@@ -35,6 +35,17 @@
 
   header h1 {
     font-size: 26px;
+  }
+
+  header p {
+    margin-top: 8px;
+    font-size: 14px;
+  }
+
+  .field-guide {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
   }
 
   .signup-section {
@@ -127,18 +138,21 @@
 <body>
 
   <header>
-    <h1>회원가입</h1>
+    <h1>주주되기</h1>
+    <p>산에서 바로 온 신선하고 맛있는 산나물, 인수의 산나물 가게입니다.</p>
   </header>
 
   <div class="signup-section">
     <form id="signup-form">
       <label for="signup-email">이메일</label>
       <input type="email" id="signup-email" placeholder="example@email.com" required>
+      <p class="field-guide">쇼핑몰 안내와 소식을 받아보실 이메일을 입력해주세요.</p>
 
       <label for="signup-password">비밀번호</label>
       <input type="password" id="signup-password" placeholder="6자 이상, 영문 대문자 포함" required>
+      <p class="field-guide">영문 대문자를 포함해 6자 이상으로 입력해주세요.</p>
 
-      <button type="submit" class="signup-btn" id="signup-btn">가입하기</button>
+      <button type="submit" class="signup-btn" id="signup-btn">주주되기</button>
 
       <p id="signup-message" class="signup-message"></p>
     </form>
@@ -204,12 +218,12 @@
       }
 
       btn.disabled = true;
-      btn.textContent = '가입 중...';
+      btn.textContent = '처리 중...';
 
       const { data, error } = await supabaseClient.auth.signUp({ email: email, password: password });
 
       btn.disabled = false;
-      btn.textContent = '가입하기';
+      btn.textContent = '주주되기';
 
       if (error) {
         showMessage(toKoreanError(error), 'error');
