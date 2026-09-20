@@ -219,6 +219,13 @@
     font-size: 15px;
   }
 
+  .card .stock-alert {
+    color: red;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 6px;
+  }
+
   .add-cart-btn {
     display: block;
     width: 100%;
@@ -746,6 +753,9 @@
       container.innerHTML = data.map(function (p) {
         const discountRate = Math.round((1 - p.price / p.old_price) * 100);
         const bestBadgeHtml = p.is_best ? '<div class="best-badge">BEST</div>' : '';
+        const stockAlertHtml = (p.stock !== null && p.stock !== undefined)
+          ? '<div class="stock-alert">' + p.stock + '개 남았음</div>'
+          : '';
 
         return '<div class="card" data-category="' + p.category + '">' +
           bestBadgeHtml +
@@ -755,6 +765,7 @@
           '<p class="product-desc">' + (p.description || '') + '</p>' +
           '<div class="old-price">' + p.old_price.toLocaleString() + '원</div>' +
           '<div class="price">' + p.price.toLocaleString() + '원 <span class="discount">(' + discountRate + '% 할인)</span></div>' +
+          stockAlertHtml +
           '<button class="add-cart-btn" onclick="addToCart(\'' + p.name + '\', ' + p.price + ')">담기</button>' +
           '</div>';
       }).join('');
