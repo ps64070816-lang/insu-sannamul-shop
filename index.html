@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>인수의 산나물 가게</title>
+<title>인수의 공구류 가게</title>
 <style>
   /* 전체 기본 설정 */
   * {
@@ -402,15 +402,15 @@
 
   <!-- 상단: 쇼핑몰 이름 + 소개 -->
   <header>
-    <h1>인수의 산나물 가게</h1>
-    <p>산에서 바로 온 신선하고 맛있는 산나물</p>
+    <h1>인수의 공구류 가게</h1>
+    <p>믿을 수 있는 튼튼한 공구류</p>
     <p id="heart-count">찜한 상품: 0개</p>
     <p id="cart-count">장바구니: 0개</p>
   </header>
 
   <!-- 메뉴 4개 -->
   <nav>
-    <a href="#" onclick="showStaticPopup('회사소개\n\n인수의 산나물 가게는 신선하고 맛있는 산나물을 산지에서 바로 보내드립니다.')">홈</a>
+    <a href="#" onclick="showStaticPopup('회사소개\n\n인수의 공구류 가게는 튼튼하고 실용적인 공구를 합리적인 가격에 보내드립니다.')">홈</a>
     <a href="#">전체상품</a>
     <a href="#">베스트</a>
     <a href="#">고객센터</a>
@@ -426,16 +426,16 @@
 
   <!-- 큰 배너 -->
   <div class="banner">
-    <h2>오늘 캔 신선한 산나물, 지금 만나보세요!</h2>
-    <button onclick="showStaticPopup('신선한 산나물을 준비했어요! 곧 만나보세요 😊')">상품 보러가기</button>
+    <h2>튼튼하고 실용적인 공구, 지금 만나보세요!</h2>
+    <button onclick="showStaticPopup('다양한 공구를 준비했어요! 곧 만나보세요 😊')">상품 보러가기</button>
   </div>
 
   <!-- 카테고리 버튼 -->
   <div class="category-buttons">
     <button class="cat-btn active" onclick="filterCategory('전체', this)">전체</button>
-    <button class="cat-btn" onclick="filterCategory('잎나물', this)">잎나물</button>
-    <button class="cat-btn" onclick="filterCategory('뿌리줄기', this)">뿌리줄기</button>
-    <button class="cat-btn" onclick="filterCategory('새싹', this)">새싹</button>
+    <button class="cat-btn" onclick="filterCategory('전동공구', this)">전동공구</button>
+    <button class="cat-btn" onclick="filterCategory('수공구', this)">수공구</button>
+    <button class="cat-btn" onclick="filterCategory('측정공구', this)">측정공구</button>
   </div>
 
   <!-- 상품 카드: Supabase products 테이블에서 불러와 JS로 채움 -->
@@ -445,13 +445,13 @@
 
   <!-- 쇼핑몰 소개글 -->
   <div class="about">
-    <h2>아름답고 창의적인 새로운 상품개발</h2>
-    <p>인수의 산나물 가게는 산에서 나는 신선한 재료로 아름답고 창의적인 새로운 상품개발에 늘 힘쓰고 있습니다.<br>주부님들의 식탁이 더 건강하고 맛있어지도록 정성을 다하겠습니다.</p>
+    <h2>믿을 수 있는 튼튼한 공구를 만듭니다</h2>
+    <p>인수의 공구류 가게는 엄선된 튼튼한 공구를 합리적인 가격에 제공하기 위해 늘 힘쓰고 있습니다.<br>고객님의 작업이 더 안전하고 편리해지도록 정성을 다하겠습니다.</p>
   </div>
 
   <!-- 맨 아래 연락처 -->
   <footer>
-    <p>인수의 산나물 | 대표: 인수 | 전화: 010-1234-5678</p>
+    <p>인수의 공구류 | 대표: 인수 | 전화: 010-1234-5678</p>
     <p>주소: 강원도 어느 산골 마을</p>
   </footer>
 
@@ -531,7 +531,7 @@
     }
 
     // 장바구니는 localStorage에 저장해서 cart.html 페이지와 공유
-    const CART_STORAGE_KEY = 'sannamulCart';
+    const CART_STORAGE_KEY = 'toolsCart';
     const cart = {};
 
     function loadCart() {
